@@ -11,7 +11,7 @@ const (
 // API configuration constants.
 const (
 	// DefaultBaseURL is the default base URL for Manus API.
-	DefaultBaseURL = "https://open.manus.ai"
+	DefaultBaseURL = "https://api.manus.ai"
 	// DefaultTimeout is the default timeout for API requests.
 	DefaultTimeout = 30 * time.Second
 	// DefaultRetryCount is the default number of retries for failed requests.
