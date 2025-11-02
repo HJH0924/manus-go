@@ -103,7 +103,7 @@ func (c *Client) handleResponse(resp *resty.Response, err error) error {
 
 	if resp.IsError() {
 		apiErr := &APIError{
-			Status: resp.StatusCode(),
+			StatusCode: resp.StatusCode(),
 		}
 
 		// Try to parse error response
