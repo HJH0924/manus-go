@@ -1,6 +1,9 @@
 package manus
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 // UpdateTaskRequest represents the request to update a task.
 type UpdateTaskRequest struct {
@@ -19,7 +22,7 @@ type UpdateTaskResponse struct {
 
 // UpdateTask updates an existing task.
 // Reference: https://open.manus.ai/docs/api-reference/update-task
-func (c *Client) UpdateTask(taskID string, req *UpdateTaskRequest) (*UpdateTaskResponse, error) {
+func (c *Client) UpdateTask(ctx context.Context, taskID string, req *UpdateTaskRequest) (*UpdateTaskResponse, error) {
 	if taskID == "" {
 		return nil, fmt.Errorf("taskID is required")
 	}
@@ -27,6 +30,7 @@ func (c *Client) UpdateTask(taskID string, req *UpdateTaskRequest) (*UpdateTaskR
 	var result UpdateTaskResponse
 
 	resp, err := c.restyClient.R().
+		SetContext(ctx).
 		SetBody(req).
 		SetResult(&result).
 		Put("/v1/tasks/" + taskID)

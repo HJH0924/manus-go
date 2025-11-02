@@ -1,6 +1,9 @@
 package manus
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 // DeleteTaskResponse represents the response from deleting a task.
 type DeleteTaskResponse struct {
@@ -11,7 +14,7 @@ type DeleteTaskResponse struct {
 
 // DeleteTask deletes a task by ID.
 // Reference: https://open.manus.ai/docs/api-reference/delete-task
-func (c *Client) DeleteTask(taskID string) (*DeleteTaskResponse, error) {
+func (c *Client) DeleteTask(ctx context.Context, taskID string) (*DeleteTaskResponse, error) {
 	if taskID == "" {
 		return nil, fmt.Errorf("taskID is required")
 	}
@@ -19,6 +22,7 @@ func (c *Client) DeleteTask(taskID string) (*DeleteTaskResponse, error) {
 	var result DeleteTaskResponse
 
 	resp, err := c.restyClient.R().
+		SetContext(ctx).
 		SetResult(&result).
 		Delete("/v1/tasks/" + taskID)
 	if err := c.handleResponse(resp, err); err != nil {

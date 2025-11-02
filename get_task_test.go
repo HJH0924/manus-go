@@ -1,6 +1,7 @@
 package manus
 
 import (
+	"context"
 	"os"
 	"testing"
 
@@ -8,10 +9,11 @@ import (
 )
 
 func TestGetTask(t *testing.T) {
+	ctx := context.Background()
 	client := NewClient(os.Getenv(ManusAPIKeyEnv))
 
 	// First create a task
-	createResp, err := client.CreateTask(&CreateTaskRequest{
+	createResp, err := client.CreateTask(ctx, &CreateTaskRequest{
 		Prompt:   "Test task for GetTask",
 		TaskMode: TaskModeChat,
 	})
@@ -21,7 +23,7 @@ func TestGetTask(t *testing.T) {
 	t.Logf("Created task: %s", taskID)
 
 	// Now get the task details
-	task, err := client.GetTask(taskID)
+	task, err := client.GetTask(ctx, taskID)
 	assert.NoError(t, err)
 	assert.NotNil(t, task)
 	assert.Equal(t, taskID, task.ID)
@@ -35,7 +37,7 @@ func TestGetTask(t *testing.T) {
 func TestGetTask_NotFound(t *testing.T) {
 	client := NewClient(os.Getenv(ManusAPIKeyEnv))
 
-	_, err := client.GetTask("nonexistent_task_id")
+	_, err := client.GetTask(context.Background(), "nonexistent_task_id")
 	assert.Error(t, err)
 	t.Logf("Expected error: %v", err)
 }

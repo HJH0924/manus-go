@@ -1,5 +1,7 @@
 package manus
 
+import "context"
+
 // CreateTaskRequest represents the request to create a task.
 type CreateTaskRequest struct {
 	Prompt              string       `json:"prompt"`
@@ -23,10 +25,11 @@ type CreateTaskResponse struct {
 
 // CreateTask creates a new AI task with custom parameters and attachments.
 // Reference: https://open.manus.ai/docs/api-reference/create-task
-func (c *Client) CreateTask(req *CreateTaskRequest) (*CreateTaskResponse, error) {
+func (c *Client) CreateTask(ctx context.Context, req *CreateTaskRequest) (*CreateTaskResponse, error) {
 	var result CreateTaskResponse
 
 	resp, err := c.restyClient.R().
+		SetContext(ctx).
 		SetBody(req).
 		SetResult(&result).
 		Post("/v1/tasks")

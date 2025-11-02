@@ -1,6 +1,9 @@
 package manus
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+)
 
 // GetTasksRequest represents the request parameters for getting tasks list.
 type GetTasksRequest struct {
@@ -25,10 +28,11 @@ type GetTasksResponse struct {
 
 // GetTasks retrieves a list of tasks with optional filtering and pagination.
 // Reference: https://open.manus.ai/docs/api-reference/get-tasks
-func (c *Client) GetTasks(params *GetTasksRequest) (*GetTasksResponse, error) {
+func (c *Client) GetTasks(ctx context.Context, params *GetTasksRequest) (*GetTasksResponse, error) {
 	var result GetTasksResponse
 
 	req := c.restyClient.R().
+		SetContext(ctx).
 		SetResult(&result)
 
 	if params != nil {

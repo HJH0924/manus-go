@@ -1,6 +1,7 @@
 package manus
 
 import (
+	"context"
 	"os"
 	"testing"
 
@@ -8,10 +9,11 @@ import (
 )
 
 func TestDeleteTask(t *testing.T) {
+	ctx := context.Background()
 	client := NewClient(os.Getenv(ManusAPIKeyEnv))
 
 	// First create a task to delete
-	createResp, err := client.CreateTask(&CreateTaskRequest{
+	createResp, err := client.CreateTask(ctx, &CreateTaskRequest{
 		Prompt:   "Test task for DeleteTask",
 		TaskMode: TaskModeChat,
 	})
@@ -21,7 +23,7 @@ func TestDeleteTask(t *testing.T) {
 	t.Logf("Created task: %s", taskID)
 
 	// Now delete the task
-	deleteResp, err := client.DeleteTask(taskID)
+	deleteResp, err := client.DeleteTask(ctx, taskID)
 	assert.NoError(t, err)
 	assert.NotNil(t, deleteResp)
 	assert.Equal(t, taskID, deleteResp.ID)
@@ -33,7 +35,7 @@ func TestDeleteTask(t *testing.T) {
 func TestDeleteTask_NotFound(t *testing.T) {
 	client := NewClient(os.Getenv(ManusAPIKeyEnv))
 
-	_, err := client.DeleteTask("nonexistent_task_id")
+	_, err := client.DeleteTask(context.Background(), "nonexistent_task_id")
 	assert.Error(t, err)
 	t.Logf("Expected error: %v", err)
 }

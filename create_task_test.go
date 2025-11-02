@@ -1,6 +1,7 @@
 package manus
 
 import (
+	"context"
 	"os"
 	"testing"
 
@@ -40,7 +41,7 @@ func TestCreateTask(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			client := NewClient(os.Getenv(ManusAPIKeyEnv))
-			resp, err := client.CreateTask(tt.req)
+			resp, err := client.CreateTask(context.Background(), tt.req)
 			assert.NoError(t, err)
 			assert.NotNil(t, resp)
 			assert.NotEmpty(t, resp.TaskID)
